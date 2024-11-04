@@ -13,7 +13,7 @@ import { calcColumnWidth } from './utils';
 
 const FOOTER_BORDER_HEIGHT = 1;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   table: {
     boxSizing: 'border-box',
 
@@ -27,9 +27,9 @@ const useStyles = makeStyles(theme => ({
 
       // Hide scrollbars on Chrome/Safari/IE
       '&::-webkit-scrollbar': {
-        display: 'none'
+        display: 'none',
       },
-      '-ms-overflow-style': 'none'
+      '-ms-overflow-style': 'none',
     },
 
     '& .topRightGrid': {
@@ -41,9 +41,9 @@ const useStyles = makeStyles(theme => ({
 
       // Hide scrollbars on Chrome/Safari/IE
       '&::-webkit-scrollbar': {
-        display: 'none'
+        display: 'none',
       },
-      '-ms-overflow-style': 'none'
+      '-ms-overflow-style': 'none',
     },
 
     '& .bottomLeftGrid': {
@@ -55,73 +55,73 @@ const useStyles = makeStyles(theme => ({
 
       // Hide scrollbars on Chrome/Safari/IE
       '&::-webkit-scrollbar': {
-        display: 'none'
+        display: 'none',
       },
-      '-ms-overflow-style': 'none'
+      '-ms-overflow-style': 'none',
     },
 
     '& .bottomRightGrid': {
       color: theme.palette.text.primary,
       fontSize: theme.typography.pxToRem(13),
-      outline: 'none' // See: https://github.com/bvaughn/react-virtualized/issues/381
-    }
+      outline: 'none', // See: https://github.com/bvaughn/react-virtualized/issues/381
+    },
   },
   cell: {
     boxSizing: 'border-box',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   cellClickable: {
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   cellSelected: {
     backgroundColor:
-      theme.palette.grey[theme.palette.type === 'dark' ? 900 : 100]
+      theme.palette.grey[theme.palette.type === 'dark' ? 900 : 100],
   },
   cellHovered: {
     backgroundColor:
-      theme.palette.grey[theme.palette.type === 'dark' ? 800 : 200]
+      theme.palette.grey[theme.palette.type === 'dark' ? 800 : 200],
   },
   cellDisabled: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   cellContents: {
     width: '100%',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   },
   cellHeader: {
     fontSize: theme.typography.pxToRem(12),
     fontWeight: theme.typography.fontWeightMedium,
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   cellInLastColumn: {
-    paddingRight: theme.spacing(3)
+    paddingRight: theme.spacing(3),
   },
   cellInLastRow: {
-    borderBottom: 'none'
+    borderBottom: 'none',
   },
   footer: {
-    borderTop: `${FOOTER_BORDER_HEIGHT}px solid ${theme.palette.divider}`
+    borderTop: `${FOOTER_BORDER_HEIGHT}px solid ${theme.palette.divider}`,
   },
   dragHandle: {
     flex: '0 0 16px',
     zIndex: 2,
     cursor: 'col-resize',
-    color: '#0085ff'
+    color: '#0085ff',
   },
   DragHandleActive: {
     color: '#0b6fcc',
-    zIndex: 3
+    zIndex: 3,
   },
   DragHandleIcon: {
     flex: '0 0 12px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 }));
 
 const calculateWidths = ({ resizable, columns: Columns }) => {
@@ -129,7 +129,7 @@ const calculateWidths = ({ resizable, columns: Columns }) => {
   if (resizable) {
     var initialWidth = 1;
     var columns = [];
-    Columns.forEach(c => {
+    Columns.forEach((c) => {
       if (c.width) {
         widths[c.name] = 0.1;
         initialWidth = initialWidth - 0.1;
@@ -137,7 +137,7 @@ const calculateWidths = ({ resizable, columns: Columns }) => {
         columns.push(c);
       }
     });
-    columns.forEach(c => {
+    columns.forEach((c) => {
       widths[c.name] = initialWidth / columns.length;
     });
   }
@@ -162,11 +162,11 @@ const useCellRenderer = ({
   onCellDoubleClick,
   onCellContextMenu,
   resizable,
-  cellProps: defaultCellProps
+  cellProps: defaultCellProps,
 }) => {
   const [{ hoveredColumn, hoveredRowData }, setHovered] = React.useState({
     hoveredColumn: null,
-    hoveredRowData: null
+    hoveredRowData: null,
   });
 
   const [widths, setWidths] = React.useState(
@@ -194,33 +194,33 @@ const useCellRenderer = ({
 
   const resizeRow = React.useCallback(
     ({ dataKey, deltaX }) =>
-      setWidths(prev => {
+      setWidths((prev) => {
         const delta = deltaX / width;
-        const index = columns.findIndex(c => c.name === dataKey);
+        const index = columns.findIndex((c) => c.name === dataKey);
         const nextDataKey = columns[index + 1].name;
         return {
           ...prev,
           [dataKey]: prev[dataKey] + delta,
-          [nextDataKey]: prev[nextDataKey] - delta
+          [nextDataKey]: prev[nextDataKey] - delta,
         };
       }),
     [setWidths, columns, width]
   );
 
   const handleDrag = React.useCallback(
-    dataKey => (event, { deltaX }) =>
+    (dataKey) => (event, { deltaX }) =>
       resizeRow({
         dataKey,
-        deltaX
+        deltaX,
       }),
     [resizeRow]
   );
 
   const handleMouse = React.useCallback(
-    (hoveredColumn, hoveredRowData) => e =>
+    (hoveredColumn, hoveredRowData) => (e) =>
       setHovered({
         hoveredColumn,
-        hoveredRowData
+        hoveredRowData,
       }),
     [setHovered]
   );
@@ -240,14 +240,14 @@ const useCellRenderer = ({
       isCellHovered &&
       isCellHovered(column, rowData, hoveredColumn, hoveredRowData);
 
-    const resolveCellProps = cellProps =>
+    const resolveCellProps = (cellProps) =>
       typeof cellProps === 'function'
         ? cellProps(column, rowData, hoveredColumn, hoveredRowData)
         : cellProps;
     // TODO: Deep merge (do not override all defaultCellProps styles if column.cellProps.styles defined?)
     const { style: cellStyle, ...cellProps } = {
       ...resolveCellProps(defaultCellProps),
-      ...resolveCellProps(column.cellProps)
+      ...resolveCellProps(column.cellProps),
     };
 
     const contents = (
@@ -294,7 +294,7 @@ const useCellRenderer = ({
       [classes.cellHeader]: isHeader,
       [classes.cellInLastColumn]: columnIndex === columns.length - 1,
       [classes.cellInLastRow]:
-        !isHeader && rowIndex === (data ? data.length : 0)
+        !isHeader && rowIndex === (data ? data.length : 0),
     });
 
     return (
@@ -306,18 +306,18 @@ const useCellRenderer = ({
         onMouseLeave={handleMouse(null, null)}
         style={{
           ...style,
-          ...cellStyle
+          ...cellStyle,
         }}
         {...(hasCellClick && {
-          onClick: event => onCellClick(event, { column, rowData, data })
+          onClick: (event) => onCellClick(event, { column, rowData, data }),
         })} // Can be overridden by cellProps.onClick on column definition
         {...(hasCellDoubleClick && {
-          onDoubleClick: event =>
-            onCellDoubleClick(event, { column, rowData, data })
+          onDoubleClick: (event) =>
+            onCellDoubleClick(event, { column, rowData, data }),
         })} // Can be overridden by cellProps.onDoubleClick on column definition
         {...(hasCellContextMenu && {
-          onContextMenu: event =>
-            onCellContextMenu(event, { column, rowData, data })
+          onContextMenu: (event) =>
+            onCellContextMenu(event, { column, rowData, data }),
         })} // Can be overridden by cellProps.onContextMenu on column definition
         {...cellProps}
       >
@@ -332,7 +332,7 @@ const useCellRenderer = ({
             }
             style={{ width: 'inherit' }} // fix text overflowing
             direction={orderDirection}
-            onClick={event =>
+            onClick={(event) =>
               column.onHeaderClick
                 ? column.onHeaderClick(event, { column })
                 : onHeaderClick(event, { column })
@@ -456,7 +456,7 @@ export default function MuiTable({
           onCellDoubleClick,
           onCellContextMenu,
           resizable,
-          cellProps
+          cellProps,
         })}
         ref={multiGrid}
         width={width}
@@ -510,6 +510,5 @@ MuiTable.propTypes = {
   isCellDisabled: PropTypes.func,
   classes: PropTypes.object,
   cellProps: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-  style: PropTypes.object
+  style: PropTypes.object,
 };
-
